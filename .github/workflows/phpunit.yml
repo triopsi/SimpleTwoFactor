@@ -1,0 +1,24 @@
+name: PHPUnit Tests
+on: [push]
+
+jobs:
+  test:
+    name: Run PHPUnit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Specify the PHP version you want to use
+          extensions: mbstring, xml, curl, intl # Add any required PHP extensions
+          coverage: xdebug # Enable code coverage
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --coverage-text --colors=never
