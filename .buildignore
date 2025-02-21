@@ -30,3 +30,4 @@ phpunit.xml
 ./coverage.xml
 webroot/coverage
 junit.xml
+.github/
