@@ -1,7 +1,7 @@
 [![Licensed under the MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/license/mit)
 [![Requires PHP 8.2.0](https://img.shields.io/badge/PHP-8.2.0-blue.svg)](https://php.net)
 [![Last Commit](https://img.shields.io/github/last-commit/triopsi/SimpleTwoFactor.svg)](https://github.com/triopsi/SimpleTwoFactor/commits/master)
-[![codecov](https://codecov.io/gh/triopsi/SimpleTwoFactor/graph/badge.svg?token=802O1544WB)](https://codecov.io/gh/triopsi/SimpleTwoFactor)
+[![codecov](https://codecov.io/github/triopsi/SimpleTwoFactor/graph/badge.svg?token=802O1544WB)](https://codecov.io/github/triopsi/SimpleTwoFactor)
 
 # SimpleTwoFactor Plugin for CakePHP 4
 This plugin provides a simple two-factor authentication (2FA) mechanism for CakePHP 4 applications. It uses the [RobThree/TwoFactorAuth](https://github.com/RobThree/TwoFactorAuth) library to handle the generation and verification of 2FA codes.
