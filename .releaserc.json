@@ -1,0 +1,48 @@
+{
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "find . -name '.DS_Store' -type f -delete"
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "prepareCmd": "zip -r SimpleTwoFactor.zip . -x @.buildignore"
+            }
+        ],
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "CHANGELOG.md"
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "CHANGELOG.md",
+                    "SimpleTwoFactor.zip"
+                ]
+            }
+        ],
+        [
+            "@semantic-release/gitlab",
+            {
+                "assets": [
+                    {
+                        "path": "SimpleTwoFactor.zip",
+                        "label": "SimpleTwoFactor.zip"
+                    },
+                    {
+                        "path": "CHANGELOG.md",
+                        "label": "Changelog"
+                    }
+                ]
+            }
+        ]
+    ]
+}
