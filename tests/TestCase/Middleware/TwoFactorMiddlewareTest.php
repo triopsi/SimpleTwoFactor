@@ -207,4 +207,88 @@ class TwoFactorMiddlewareTest extends TestCase {
 		$instance = $handler->request->getAttribute( 'simpleAuthenticationResult' );
 		$this->assertEquals( ResultResult::SIMPLE_TWO_FA_AUTH_FAILED, $instance->getStatus() );
 	}
+
+	/**
+	 * Test the process method with different QR code providers.
+	 */
+	public function testProcessWithDifferentQrCodeProviders() {
+		$providers = ['BaconQrCodeProvider', 'EndroidQrCodeProvider', 'defaultTrigger'];
+
+		foreach ($providers as $provider) {
+			$middleware = new TwoFactorMiddleware(['qrcodeprovider' => $provider]);
+
+			$request = new ServerRequest();
+			$request = $request->withAttribute(
+				'identity',
+				array(
+					'id'          => 1,
+					'username'    => 'user1',
+					'secret_2tfa' => 'secret1',
+				)
+			);
+			$handler = new TestRequestHandler();
+
+			$response = $middleware->process($request, $handler);
+			$this->assertInstanceOf(Response::class, $response);
+
+			$headers = $response->getHeaders();
+			$this->assertEquals('/users/verifytfa', $headers['Location'][0]);
+
+			$instance = $handler->request->getAttribute('simpleAuthenticationResult');
+			$this->assertEquals(ResultResult::SIMPLE_TWO_FA_AUTH_REQUIRED, $instance->getStatus());
+		}
+	}
+
+	/**
+	 * Test the process method with different algorithms.
+	 */
+	public function testProcessWithDifferentAlgorithms() {
+		$algorithms = ['md5', 'sha1', 'sha256', 'sha512', 'defaultTrigger'];
+
+		foreach ($algorithms as $algorithm) {
+			$middleware = new TwoFactorMiddleware(['algorithm' => $algorithm]);
+
+			$request = new ServerRequest();
+			$request = $request->withAttribute(
+				'identity',
+				array(
+					'id'          => 1,
+					'username'    => 'user1',
+					'secret_2tfa' => 'secret1',
+				)
+			);
+			$handler = new TestRequestHandler();
+
+			$response = $middleware->process($request, $handler);
+			$this->assertInstanceOf(Response::class, $response);
+
+			$headers = $response->getHeaders();
+			$this->assertEquals('/users/verifytfa', $headers['Location'][0]);
+
+			$instance = $handler->request->getAttribute('simpleAuthenticationResult');
+			$this->assertEquals(ResultResult::SIMPLE_TWO_FA_AUTH_REQUIRED, $instance->getStatus());
+		}
+	}
+
+	/**
+	 * Test the _verifyCode method with an invalid code.
+	 */
+	public function testVerifyCodeWithInvalidCode() {
+		$secret = 'secret1';
+		$invalidCode = '654321';
+
+		$result = $this->invokeMethod($this->middleware, '_verifyCode', [$secret, $invalidCode]);
+		$this->assertFalse($result);
+	}
+
+	/**
+	 * Helper method to invoke protected/private methods.
+	 */
+	protected function invokeMethod(&$object, $methodName, array $parameters = []) {
+		$reflection = new \ReflectionClass(get_class($object));
+		$method = $reflection->getMethod($methodName);
+		$method->setAccessible(true);
+
+		return $method->invokeArgs($object, $parameters);
+	}
 }

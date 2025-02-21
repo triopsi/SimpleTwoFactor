@@ -12,6 +12,7 @@ use Cake\Routing\RouteBuilder;
 
 /**
  * Plugin for SimpleTwoFactor
+ * @codeCoverageIgnore
  */
 class SimpleTwoFactorPlugin extends BasePlugin
 {

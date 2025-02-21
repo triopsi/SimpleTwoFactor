@@ -103,7 +103,10 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 		}
 
 		// 1. Get the 2FA secret from the user
-		$twoFactorSecret = $this->_getUserSecretField( $userIdentity );
+		$twoFactorSecret = false;
+		if($this->_getUserTwoFaEnabledStatus( $userIdentity )){
+			$twoFactorSecret = $this->_getUserSecretField( $userIdentity );
+		}
 
 		// 2. Get the 2FA verified status from the session
 		$verifyViaSession = $this->_getUserTwoFaEnabledStatusFromSession( $userSession );

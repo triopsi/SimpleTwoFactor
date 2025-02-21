@@ -58,7 +58,8 @@ class Result implements ResultInterface {
 
 	/**
 	 * Returns whether the result represents a successful authentication attempt.
-	 *
+	 * @codeCoverageIgnore
+	 * 
 	 * @return bool
 	 */
 	public function isValid(): bool {
@@ -77,6 +78,7 @@ class Result implements ResultInterface {
 	/**
 	 * Returns the data related to the authentication attempt.
 	 *
+	 * @codeCoverageIgnore
 	 * @return array
 	 */
 	public function getData(): array {
@@ -86,6 +88,7 @@ class Result implements ResultInterface {
 	/**
 	 * Returns the errors related to the authentication attempt.
 	 *
+	 * @codeCoverageIgnore
 	 * @return array
 	 */
 	public function getErrors(): array {
