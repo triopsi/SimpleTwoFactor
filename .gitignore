@@ -13,3 +13,4 @@ node_modules/
 .env
 webroot/coverage
 ./coverage.xml
+junit.xml
