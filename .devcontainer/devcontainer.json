@@ -46,7 +46,8 @@
 				"emallin.phpunit",
 				"yzhang.markdown-all-in-one",
 				"esbenp.prettier-vscode",
-				"ikappas.phpcs"
+				"ikappas.phpcs",
+				"github.vscode-github-actions"
 			],
 			"settings": { 
 				"terminal.integrated.shell.linux": "/bin/bash", // Use bash in the terminal

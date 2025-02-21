@@ -16,7 +16,6 @@ README.md
 VERSION
 webpack.mix.js
 .DS_Store
-# DEV or not
 vendor/*
 node_modules/*
 src/assets/*
@@ -31,3 +30,5 @@ tmp/*
 .phpcs.xml
 bin/*
 phpunit.xml
+./coverage.xml
+webroot/coverage
