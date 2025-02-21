@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.1...v1.0.2) (2025-02-21)
+
+
+### Bug Fixes
+
+* remove coverage.xml ([18b258b](https://github.com/triopsi/SimpleTwoFactor/commit/18b258b130c75053f392542db689c999fdc3e90f))
+
 ## [1.0.1](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.0...v1.0.1) (2025-02-21)
 
 
