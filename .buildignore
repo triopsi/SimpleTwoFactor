@@ -1,12 +1,9 @@
 .git/*
 .gitlab-ci.yml
 build/*
-tests/*
 utils/*
 .vscode/*
 .devcontainer/*
-composer.json
-composer.lock
 .buildignore
 .gitignore
 mix-manifest.json
