@@ -8,3 +8,6 @@ vendor/
 .idea/
 .vscode/
 node_modules/
+*.zip
+*.tar.gz
+.env

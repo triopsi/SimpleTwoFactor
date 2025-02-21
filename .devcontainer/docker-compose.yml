@@ -1,0 +1,39 @@
+# This Docker Compose file sets up a multi-container application environment.
+# It defines services, networks, and volumes required for the application.
+# Each service represents a container, specifying the image, ports, volumes, and other configurations.
+# The file facilitates easy orchestration and management of the application's containers.
+services: 
+  app:
+    build: ./ # Build the Dockerfile in the current directory
+    ports:
+      - 8080:80 # Forward host port 8080 to container port 80
+    volumes:
+      - ../:/var/www/html
+
+  db:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+    - mariadb-data-simple-two-factor:/var/lib/mysql
+    - ./mariadb.conf:/etc/mysql/conf.d
+
+  db-test:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${TEST_DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${TEST_DB_DATABASE}
+      MARIADB_USER: ${TEST_DB_USERNAME} 
+      MARIADB_PASSWORD: ${TEST_DB_PASSWORD}
+    volumes:
+    - mariadb-test-data-simple-two-factor:/var/lib/mysql
+    - ./mariadb.conf:/etc/mysql/conf.d
+
+volumes:
+  mariadb-data-simple-two-factor:
+  mariadb-test-data-simple-two-factor:

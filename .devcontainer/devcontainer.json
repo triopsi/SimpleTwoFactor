@@ -1,0 +1,58 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/php-mariadb
+{
+	"name": "SimpleTwoFactor", // Name of the dev container
+	"dockerComposeFile": "docker-compose.yml", // Path to the docker-compose.yml file
+	"service": "app", // Service name from docker-compose.yml
+
+	// Uncomment the appropriate line depending on plugin vs theme development.
+	// This should match the active volume mount in docker-compose.yml
+	"workspaceFolder": "/var/www/html/",
+
+	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
+	"forwardPorts": [
+		"db:3306",
+		"db-test:3306"
+	], // Ports to forward from the container to the host
+
+	"portsAttributes": {
+		"8080": {
+			"label": "Webserver"
+		},
+		"db:3306": {
+			"label": "MySQL"
+		},
+		"db-test:3306": {
+			"label": "Test MySQL"
+		},
+	},
+
+	// Set *default* container specific settings.json values on container create.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"xdebug.php-debug",
+				"bmewburn.vscode-intelephense-client",
+				"ecmel.vscode-html-css",
+				"DavidAnson.vscode-markdownlint",
+				"Gruntfuggly.todo-tree",
+				"DEVSENSE.composer-php-vscode",
+				"ms-azuretools.vscode-docker",
+				"doi.fileheadercomment",
+				"ikappas.composer",
+				"Compulim.compulim-vscode-closetag",
+				"neilbrayfield.php-docblocker",
+				"persoderlind.vscode-phpcbf",
+				"emallin.phpunit",
+				"yzhang.markdown-all-in-one",
+				"esbenp.prettier-vscode",
+				"ikappas.phpcs"
+			],
+			"settings": { 
+				"terminal.integrated.shell.linux": "/bin/bash", // Use bash in the terminal
+				"php.suggest.basic": false // avoids duplicate autocomplete
+			}
+		}
+	},
+	"remoteUser": "php" // User to use in the container
+}
