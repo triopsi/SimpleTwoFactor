@@ -287,8 +287,8 @@ class UsersController extends AppController
 
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            if ( true === $this->SimpleTwoFactor->verifyCode( $secret, $data['code_app'] ) ) {
-                $user->secret = $secret;
+            if ( true === $this->SimpleTwoFactor->verifyCode( $data['secret'], $data['code_app'] ) ) {
+                $user->secret = $data['secret'];
                 if ($this->Users->save($user)) {
                     $this->Flash->success(__('The 2FA secret has been saved.'));
                     return $this->redirect(['action' => 'index']);
@@ -300,7 +300,7 @@ class UsersController extends AppController
 			}
         }
 
-        $this->set(compact('qrCodeUrl'));
+        $this->set(compact('qrCodeUrl', 'secret'));
     }
 }
 ```
@@ -324,6 +324,7 @@ $this->assign('title', __('Setup Two-Factor Authentication'));
             <?php echo __('After scanning, enter the code into the field and click the button below to save your 2FA secret.'); ?>
         </p>
         <?php echo $this->Form->create(); ?>
+        <?php echo $this->Form->control('secret', array('type' => 'hidden', 'value'=>$secret)); ?>
         <?php echo $this->Form->control('code_app', array('type' => 'text')); ?>
         <?php echo $this->Form->button(__('Save 2FA Secret')); ?>
         <?php echo $this->Form->end(); ?>
