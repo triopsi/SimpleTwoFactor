@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.2...v1.0.3) (2025-02-26)
+
+
+### Bug Fixes
+
+* Always get the result SIMPLE_TWO_FA_NO_AUTH_REQUIREd ([f661db1](https://github.com/triopsi/SimpleTwoFactor/commit/f661db1c3a422bd6d18e324cf6fccaeba252533d))
+
 ## [1.0.2](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.1...v1.0.2) (2025-02-21)
 
 
