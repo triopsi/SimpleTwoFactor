@@ -112,11 +112,11 @@ class TwoFactorMiddlewareTest extends TestCase {
 	 */
 	public function testProcessWithValid2FACode() {
 
-		$authUser = (object) [
+		$authUser = new \ArrayObject([
 			'id' => 1,
 			'username' => 'user1',
 			'secret_2tfa' => 'secret1',
-		];
+		], \ArrayObject::ARRAY_AS_PROPS);
 		$session = new \Cake\Http\Session();
 		$session->write('Auth', $authUser);
 
@@ -166,11 +166,11 @@ class TwoFactorMiddlewareTest extends TestCase {
 	 * - Die Response sollte den Status SIMPLE_TWO_FA_AUTH_FAILED enthalten.
 	 */
 	public function testProcessWithInvalid2FACode() {
-		$authUser = (object) [
+		$authUser = new \ArrayObject([
 			'id' => 1,
 			'username' => 'user1',
 			'secret_2tfa' => 'secret1',
-		];
+		], \ArrayObject::ARRAY_AS_PROPS);
 		$session = new \Cake\Http\Session();
 		$session->write('Auth', $authUser);
 

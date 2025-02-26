@@ -104,7 +104,7 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 
 		// 1. Get the 2FA secret from the user
 		$twoFactorSecret = false;
-		if($this->_getUserTwoFaEnabledStatus( $userIdentity )){
+		if ( $this->_getUserTwoFaEnabledStatus( $userIdentity ) ) {
 			$twoFactorSecret = $this->_getUserSecretField( $userIdentity );
 		}
 
@@ -128,7 +128,7 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 
 			// If the code is valid, set the 2FA verified status in the session
 			if ( $validCode ) {
-				$userSession->{$this->getConfig( 'userSessionKey' )} = true;
+				$userSession->{$this->getConfig( 'sessionKeyVerified' )} = true;
 				$this->_writeUserSession( $request, $userSession );
 				$result  = new ResultResult( ResultResult::SIMPLE_TWO_FA_AUTH_SUCCESS );
 				$request = $request->withAttribute( 'simpleAuthenticationResult', $result );
@@ -146,8 +146,10 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 
 		// If the user has a 2FA secret or it's not 2tfa verified or the target is the redirectUrl, than redirect to the 2FA verification page.
 		if ( ! $twoFactorSecret || $verifyViaSession || $validRequestRedirecTarget ) {
-			$result  = new ResultResult( ResultResult::SIMPLE_TWO_FA_NO_AUTH_REQUIRED );
-			$request = $request->withAttribute( 'simpleAuthenticationResult', $result );
+			if ( ! $twoFactorSecret || $verifyViaSession ) {
+				$result  = new ResultResult( ResultResult::SIMPLE_TWO_FA_NO_AUTH_REQUIRED );
+				$request = $request->withAttribute( 'simpleAuthenticationResult', $result );
+			}
 			return $handler->handle( $request );
 		}
 
@@ -185,7 +187,7 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 		if ( empty( $user ) ) {
 			return false;
 		}
-		return $user;
+		return (bool) Hash::get( $user, $this->getConfig( 'sessionKeyVerified' ) );
 	}
 
 	/**
