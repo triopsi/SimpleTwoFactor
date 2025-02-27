@@ -39,6 +39,8 @@ class TwoFactorMiddlewareTest extends TestCase {
 		$this->assertInstanceOf( Response::class, $response );
 
 		$instance = $handler->request->getAttribute( 'simpleAuthenticationResult' );
+		$session = $handler->request->getAttribute( 'simpleAuthenticationSessionKey' );
+		$this->assertEquals( '2fa_verified', $session );
 		$this->assertEquals( ResultResult::SIMPLE_TWO_FA_AUTH_MISSING_CREDENTIALS, $instance->getStatus() );
 	}
 

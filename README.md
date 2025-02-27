@@ -26,6 +26,7 @@ This plugin provides a simple two-factor authentication (2FA) mechanism for Cake
     - [Load the Component](#load-the-component)
     - [Generating a QR Code](#generating-a-qr-code)
     - [Example View](#example-view)
+    - [Logout](#logout)
   - [Bugs \& Feedback](#bugs--feedback)
   - [License](#license)
 
@@ -249,7 +250,7 @@ Load the `SimpleTwoFactorComponent` in your controller:
 
 ```php
 <?php
-// filepath: /var/www/html/src/Controller/UsersController.php
+// filepath: src/Controller/UsersController.php
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -262,12 +263,13 @@ class UsersController extends AppController
     }
 }
 ```
+
 ### Generating a QR Code
 To generate a QR code for the user to scan with their 2FA app, you need to create a secret and then generate the QR code image.
 
 ```php
 <?php
-// filepath: /var/www/html/src/Controller/UsersController.php
+// filepath: src/Controller/UsersController.php
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -310,7 +312,7 @@ Create a view for the 2FA setup form where the user can scan the QR code.
 Example for setup2fa.php
 ```php
 <?php
-// filepath: /var/www/html/templates/Users/setup2fa.php
+// filepath: src/templates/Users/setup2fa.php
 <?php
 $this->assign('title', __('Setup Two-Factor Authentication'));
 ?>
@@ -330,6 +332,36 @@ $this->assign('title', __('Setup Two-Factor Authentication'));
         <?php echo $this->Form->end(); ?>
     </div>
 </div>
+```
+
+### Logout
+
+Before the user logs out in the normal way, the session that generated the middleware must be deleted. The component contains the `deleteVerfifiedSession()` method for this purpose. This can be called as follows:
+
+```php
+<?php
+// filepath: src/Controller/UsersController.php
+namespace App\Controller;
+
+use App\Controller\AppController;
+
+class UsersController extends AppController
+{
+    public function logout(): void {
+       
+        $result = $this->Authentication->getResult();
+        // regardless of POST or GET, redirect if user is logged in
+        if ($result && $result->isValid()) {
+
+            // Delete Session.
+            $this->SimpleTwoFactor->deleteVerfifiedSession();
+
+            $this->Authentication->logout();
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+
+    }
+}
 ```
 
 ## Bugs & Feedback
