@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.3...v1.0.4) (2025-02-27)
+
+
+### Bug Fixes
+
+* write and delete session ([2c0f198](https://github.com/triopsi/SimpleTwoFactor/commit/2c0f198af96b33c65f1c607908e346a8b895811e))
+
 ## [1.0.3](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.2...v1.0.3) (2025-02-26)
 
 
