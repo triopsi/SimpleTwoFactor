@@ -33,7 +33,7 @@ class SimpleTwoFactorComponent extends Component {
 	 * @return bool
 	 * @throws \RobThree\Auth\TwoFactorAuthException Throws.
 	 */
-	public function verifyCode( $secret, $code) {
+	public function verifyCode( $secret, $code ) {
 		return $this->getTfa()->verifyCode( $secret, str_replace( ' ', '', $code ) );
 	}
 
@@ -45,7 +45,7 @@ class SimpleTwoFactorComponent extends Component {
 	 * @return string
 	 * @throws \RobThree\Auth\TwoFactorAuthException Throws.
 	 */
-	public function createSecret( $bits = 80, $requireCryptoSecure = true) {
+	public function createSecret( $bits = 80, $requireCryptoSecure = true ) {
 		return $this->getTfa()->createSecret( $bits, $requireCryptoSecure );
 	}
 
@@ -58,27 +58,44 @@ class SimpleTwoFactorComponent extends Component {
 	 * @return string
 	 * @throws \RobThree\Auth\TwoFactorAuthException Throws.
 	 */
-	public function getQRCodeImageAsDataUri( $label, $secret, $size = 200) {
+	public function getQRCodeImageAsDataUri( $label, $secret, $size = 200 ) {
 		return $this->getTfa()->getQRCodeImageAsDataUri( $label, $secret, $size );
 	}
 
 	/**
+	 * Delete verified session.
+	 *
+	 * @return void
+	 */
+	public function deleteVerfifiedSession() {
+		$controller                     = $this->getController();
+		$simpleAuthenticationSessionKey = $controller->getRequest()->getAttribute( 'simpleAuthenticationSessionKey' );
+		if ( $simpleAuthenticationSessionKey === null ) {
+			throw new Exception(
+				'The request object does not contain the required `simpleAuthenticationSessionKey` attribute. Verify the ' .
+				'TwoFactorMiddleware has been added.'
+			);
+		}
+		$controller->getRequest()->getSession()->delete( $simpleAuthenticationSessionKey );
+	}
+
+	/**
 	 * Get the result of the two-factor authentication.
-	 * 
+	 *
 	 * @return \Authentication\Authenticator\ResultInterface
 	 * @throws \Exception Throws.
 	 */
-    public function getResult() {
-        $controller = $this->getController();
-        $simpleAuthenticationResult = $controller->getRequest()->getAttribute('simpleAuthenticationResult');
-        if ($simpleAuthenticationResult === null) {
-            throw new Exception(
-                'The request object does not contain the required `simpleAuthenticationResult` attribute. Verify the ' .
-                'TwoFactorMiddleware has been added.'
-            );
-        }
-        return $simpleAuthenticationResult;
-    }
+	public function getResult() {
+		$controller                 = $this->getController();
+		$simpleAuthenticationResult = $controller->getRequest()->getAttribute( 'simpleAuthenticationResult' );
+		if ( $simpleAuthenticationResult === null ) {
+			throw new Exception(
+				'The request object does not contain the required `simpleAuthenticationResult` attribute. Verify the ' .
+				'TwoFactorMiddleware has been added.'
+			);
+		}
+		return $simpleAuthenticationResult;
+	}
 
 	/**
 	 * Get RobThree\Auth\TwoFactorAuth object.
@@ -87,14 +104,14 @@ class SimpleTwoFactorComponent extends Component {
 	 * @throws \RobThree\Auth\TwoFactorAuthException Throws.
 	 */
 	public function getTfa() {
-        $controller = $this->getController();
-        $simpleAuthenticationObject = $controller->getRequest()->getAttribute('simpleAuthenticationObject');
-        if ($simpleAuthenticationObject === null) {
-            throw new Exception(
-                'The request object does not contain the required `simpleAuthenticationObject` attribute. Verify the ' .
-                'TwoFactorMiddleware has been added.'
-            );
-        }
+		$controller                 = $this->getController();
+		$simpleAuthenticationObject = $controller->getRequest()->getAttribute( 'simpleAuthenticationObject' );
+		if ( $simpleAuthenticationObject === null ) {
+			throw new Exception(
+				'The request object does not contain the required `simpleAuthenticationObject` attribute. Verify the ' .
+				'TwoFactorMiddleware has been added.'
+			);
+		}
 
 		return $simpleAuthenticationObject;
 	}

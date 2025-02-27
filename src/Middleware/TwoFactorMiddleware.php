@@ -91,13 +91,14 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 	public function process( ServerRequestInterface $request, RequestHandlerInterface $handler ): ResponseInterface {
 
 		// Get the user from the session.
-		$userSession  = $this->_getUserSession( $request );
+		$userSession  = $request->getAttribute( 'session' );
 		$userIdentity = $request->getAttribute( 'identity' );
 
 		// If no user is logged in, we don't need to check for 2FA
 		$result  = new ResultResult( ResultResult::SIMPLE_TWO_FA_AUTH_MISSING_CREDENTIALS );
 		$request = $request->withAttribute( 'simpleAuthenticationResult', $result );
 		$request = $request->withAttribute( 'simpleAuthenticationObject', $this->getTfa() );
+		$request = $request->withAttribute( 'simpleAuthenticationSessionKey', $this->getConfig( 'sessionKeyVerified' ) );
 		if ( empty( $userIdentity ) ) {
 			return $handler->handle( $request );
 		}
@@ -128,8 +129,7 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 
 			// If the code is valid, set the 2FA verified status in the session
 			if ( $validCode ) {
-				$userSession->{$this->getConfig( 'sessionKeyVerified' )} = true;
-				$this->_writeUserSession( $request, $userSession );
+				$this->_writeUserSession( $userSession );
 				$result  = new ResultResult( ResultResult::SIMPLE_TWO_FA_AUTH_SUCCESS );
 				$request = $request->withAttribute( 'simpleAuthenticationResult', $result );
 			} else {
@@ -178,38 +178,22 @@ class TwoFactorMiddleware implements MiddlewareInterface {
 	}
 
 	/**
-	 * Check if 2FA is enabled for the given user.
+	 * Check if 2FA was already verified in the session.
 	 *
-	 * @param array $user User.
+	 * @param \Cake\Http\Session $userSession Request Session.
 	 * @return bool
 	 */
-	protected function _getUserTwoFaEnabledStatusFromSession( $user ) {
-		if ( empty( $user ) ) {
-			return false;
-		}
-		return (bool) Hash::get( $user, $this->getConfig( 'sessionKeyVerified' ) );
+	protected function _getUserTwoFaEnabledStatusFromSession( \Cake\Http\Session $userSession ) {
+		return $userSession->check( $this->getConfig( 'sessionKeyVerified' ) );
 	}
 
 	/**
-	 * Get the User Session.
+	 * Write the Session.
 	 *
-	 * @param ServerRequestInterface $request
-	 * @return object|null
+	 * @param \Cake\Http\Session $userSession Request Session.
 	 */
-	protected function _getUserSession( ServerRequestInterface $request ) {
-		$session = $request->getAttribute( 'session' );
-		return $session->read( $this->getConfig( 'userSessionKey' ) );
-	}
-
-	/**
-	 * Write the User Session.
-	 *
-	 * @param ServerRequestInterface $request
-	 * @param $value
-	 */
-	protected function _writeUserSession( ServerRequestInterface $request, $value ) {
-		$session = $request->getAttribute( 'session' );
-		$session->write( $this->getConfig( 'userSessionKey' ), $value );
+	protected function _writeUserSession( \Cake\Http\Session $userSession ) {
+		$userSession->write( $this->getConfig( 'sessionKeyVerified' ), true );
 	}
 
 	/**

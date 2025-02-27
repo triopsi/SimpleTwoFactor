@@ -6,6 +6,7 @@ namespace SimpleTwoFactor\Test\TestCase\Controller\Component;
 use Cake\Controller\ComponentRegistry;
 use Cake\Controller\Controller;
 use Cake\Http\ServerRequest;
+use Cake\Http\Session;
 use Cake\TestSuite\TestCase;
 use RobThree\Auth\TwoFactorAuth;
 use SimpleTwoFactor\Controller\Component\SimpleTwoFactorComponent;
@@ -151,6 +152,54 @@ class SimpleTwoFactorComponentTest extends TestCase
     }
 
     /**
+     * Test the deleteVerifiedSession method.
+     *
+     * Testziel:
+     * - Überprüfen, dass die Methode deleteVerifiedSession den 2FA-Status aus der Sitzung entfernt.
+     *
+     * Erwartetes Ergebnis:
+     * - Die Methode sollte den 2FA-Status aus der Sitzung entfernen.
+     */
+    public function testDeleteVerifiedSession()
+    {
+        $session = new Session();
+        $session->write('2fa_verified', true);
+
+        $request = new ServerRequest();
+        $request = $request->withAttribute('session', $session);
+        $request = $request->withAttribute('simpleAuthenticationSessionKey', '2fa_verified');
+        $controller = new Controller($request);
+        $registry = new ComponentRegistry($controller);
+        $simpleTwoFactor = new SimpleTwoFactorComponent($registry);
+
+        $simpleTwoFactor->deleteVerfifiedSession();
+
+        $this->assertFalse($session->check('2fa_verified'));
+    }
+
+    /**
+     * Test the deleteVerifiedSession method throws exception.
+     *
+     * Testziel:
+     * - Überprüfen, dass die Methode deleteVerifiedSession eine Ausnahme auslöst, wenn das Attribut simpleAuthenticationSessionKey nicht vorhanden ist.
+     *
+     * Erwartetes Ergebnis:
+     * - Die Methode sollte eine Exception mit der entsprechenden Fehlermeldung auslösen.
+     */
+    public function testDeleteVerifiedSessionThrowsException()
+    {
+        $request = new ServerRequest();
+        $controller = new Controller($request);
+        $registry = new ComponentRegistry($controller);
+        $simpleTwoFactor = new SimpleTwoFactorComponent($registry);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The request object does not contain the required `simpleAuthenticationSessionKey` attribute. Verify the TwoFactorMiddleware has been added.');
+
+        $simpleTwoFactor->deleteVerfifiedSession();
+    }
+
+    /**
      * Test the getTfa method.
      *
      * Testziel:
@@ -193,4 +242,8 @@ class SimpleTwoFactorComponentTest extends TestCase
 
         $simpleTwoFactor->getTfa();
     }
+
+
+
+
 }
