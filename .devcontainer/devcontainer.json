@@ -16,15 +16,9 @@
 	], // Ports to forward from the container to the host
 
 	"portsAttributes": {
-		"8080": {
+		"8383": {
 			"label": "Webserver"
-		},
-		"db:3306": {
-			"label": "MySQL"
-		},
-		"db-test:3306": {
-			"label": "Test MySQL"
-		},
+		}
 	},
 
 	// Set *default* container specific settings.json values on container create.
