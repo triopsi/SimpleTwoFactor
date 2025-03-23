@@ -6,7 +6,7 @@ services:
   app:
     build: ./ # Build the Dockerfile in the current directory
     ports:
-      - 8080:80 # Forward host port 8080 to container port 80
+      - 8383:80 # Forward host port 8080 to container port 80
     volumes:
       - ../:/var/www/html
 
