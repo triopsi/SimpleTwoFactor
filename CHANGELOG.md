@@ -1,3 +1,11 @@
+## [1.0.6](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.5...v1.0.6) (2025-04-21)
+
+
+### Bug Fixes
+
+* remove CakePHP 5.0 compatibility from version constraint ([f6977d6](https://github.com/triopsi/SimpleTwoFactor/commit/f6977d67be24603f603d6c7c943fb673a0db35af))
+* update for newer versions ([01e682f](https://github.com/triopsi/SimpleTwoFactor/commit/01e682f30293639ea6545881efa1c3ca2c8a2639))
+
 ## [1.0.5](https://github.com/triopsi/SimpleTwoFactor/compare/v1.0.4...v1.0.5) (2025-03-23)
 
 
